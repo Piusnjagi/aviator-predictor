@@ -1,0 +1,34 @@
+const multipliers = [1.3, 2.0, 4.5, 1.1, 3.2, 1.4, 2.8];
+
+function generatePrediction() {
+  const history = multipliers.slice(-5);
+  const lowCount = history.filter(x => x < 1.5).length;
+  const highCount = history.filter(x => x > 3.0).length;
+
+  let prediction = "Stable";
+  let confidence = "Medium";
+  if (lowCount >= 3) {
+    prediction = "Climb expected (2.5x+)";
+    confidence = "High";
+  } else if (highCount >= 3) {
+    prediction = "Crash Likely (<1.5x)";
+    confidence = "High";
+  }
+
+  document.getElementById("prediction").innerText = prediction;
+  document.getElementById("confidence").innerText = confidence;
+
+  updateHistory();
+}
+
+function updateHistory() {
+  const ul = document.getElementById("multiplier-history");
+  ul.innerHTML = "";
+  multipliers.slice(-10).forEach(x => {
+    const li = document.createElement("li");
+    li.textContent = x + "x";
+    ul.appendChild(li);
+  });
+}
+
+window.onload = updateHistory;
